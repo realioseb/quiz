@@ -1,6 +1,6 @@
 <?php
 
-if (isset($_POST['book_name']) && isset($_POST['book_author'])) {
+if (!empty($_POST['book_name']) && !empty($_POST['book_author'])) {
     $data = array(
         'book' => array(
             'name' => $_POST['book_name'],
@@ -8,22 +8,10 @@ if (isset($_POST['book_name']) && isset($_POST['book_author'])) {
         )
     );
     
-    $parsedData = json_encode($data);
+    header('Content-type: application/json', true, 201);
     
-    $status = "HTTP/1.1 201 Created";
+    print json_encode($data);
     
-    $bookReg = array(
-        'name' => $data['book']['name'],
-        'author' => $data['book']['author']
-    );
-    
-    $db = new PDO('mysql:host=localhost;dbname=quiz', 'root', '');
-    
-    $prep = $db->prepare('INSERT INTO book (name, author) VALUES (?, ?)');
-    $prep->execute(array(
-                $bookReg['name'],
-                $bookReg['author']
-            ));
 } else {
     $data = array(
         'error' => array(
@@ -31,12 +19,7 @@ if (isset($_POST['book_name']) && isset($_POST['book_author'])) {
         )
     );
     
-    $parsedData = json_encode($data);
+    header('Content-type: application/json', true, 400);
     
-    $status = "HTTP/1.1 400 Bad Request";
+    print json_encode($data);
 }
-    
-header($status);
-header("Content-type: application/json");
-
-exit($parsedData);
