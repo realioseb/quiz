@@ -25,5 +25,6 @@
                 </div>
             </fieldset>
         </form>
+        <script src="js.js"></script>
     </body>
 </html>
